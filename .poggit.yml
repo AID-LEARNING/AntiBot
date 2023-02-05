@@ -1,0 +1,12 @@
+---
+branches:
+  - stable
+projects:
+  AntiBot:
+    path: ""
+    lint:
+      phpstan: false
+    libs:
+      - src: AID-LEARNING/ExtraEvent/libEventAttribute
+        version: ^1.0.2
+...

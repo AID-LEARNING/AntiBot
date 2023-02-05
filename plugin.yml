@@ -1,0 +1,6 @@
+name: AntiBot
+authors:
+  - SenseiTarzan
+version: 1.0.0
+main: SenseiTarzan\AntiBot\Main
+api: 4.0.0
