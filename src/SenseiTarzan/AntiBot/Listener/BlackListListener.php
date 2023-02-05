@@ -4,6 +4,7 @@ namespace SenseiTarzan\AntiBot\Listener;
 
 use pocketmine\event\EventPriority;
 use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\network\mcpe\protocol\ClientCacheBlobStatusPacket;
 use pocketmine\network\mcpe\protocol\CraftingEventPacket;
 use pocketmine\network\mcpe\protocol\InventoryTransactionPacket;
 use pocketmine\network\mcpe\protocol\ItemStackRequestPacket;
@@ -21,6 +22,7 @@ class BlackListListener
     const MAX_ITEM_INTERACTION = 100;
     const MAX_METADATA = 130;
     const MAX_TEXT_PARAMETERS = 100;
+    const MAX_ITEM_STACK_REQUEST = 100;
     const MAX_CRAFTING_INPUT = 0;
     const MAX_CRAFTING_OUTPUT = 1;
     #[EventAttribute(EventPriority::LOWEST)]
@@ -31,33 +33,29 @@ class BlackListListener
             if (count($packet->trData->getActions()) >= self::MAX_INVENTORY_TRANSACTION) {
                 $this->blockEvent($event);
             }
-        }
-        if ($packet instanceof PlayerAuthInputPacket) {
+        }else if ($packet instanceof PlayerAuthInputPacket) {
             if (($packet->getBlockActions() !== null && count($packet->getBlockActions()) >= self::MAX_BLOCK_ACTION) || ($packet->getItemInteractionData() !== null && count($packet->getItemInteractionData()->getRequestChangedSlots()) >= self::MAX_ITEM_INTERACTION)) {
                 $this->blockEvent($event);
             }
-        }
-
-        if ($packet instanceof SetActorDataPacket) {
+        }else if ($packet instanceof SetActorDataPacket) {
             if (count($packet->metadata) >= self::MAX_METADATA) {
                 $this->blockEvent($event);
             }
-        }
-
-        if ($packet instanceof ItemStackRequestPacket){
-            var_dump(count($packet->getRequests()));
-        }
-
-        if ($packet instanceof CraftingEventPacket) {
+        }else if ($packet instanceof ItemStackRequestPacket){
+            if (count($packet->getRequests()) > self::MAX_ITEM_STACK_REQUEST) {
+                $this->blockEvent($event);
+            }
+        }else if ($packet instanceof CraftingEventPacket) {
             if (count($packet->input) > self::MAX_CRAFTING_INPUT || count($packet->output) > self::MAX_CRAFTING_OUTPUT) {
                 $this->blockEvent($event);
             }
-        }
-
-        if ($packet instanceof TextPacket) {
+        }else if ($packet instanceof TextPacket) {
             if (count($packet->parameters) >= self::MAX_TEXT_PARAMETERS) {
                 $this->blockEvent($event);
             }
+        }else if ($packet instanceof ClientCacheBlobStatusPacket) {
+            var_dump(count($packet->getHitHashes()));
+            var_dump(count($packet->getMissHashes()));
         }
     }
 
