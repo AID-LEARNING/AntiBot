@@ -13,6 +13,9 @@
     <include_path>
       <path value="$USER_HOME$/OneDrive/Documents/GitHub/PocketMine-MP" />
       <path value="$PROJECT_DIR$/../Virions/ExtraEvent" />
+      <path value="$PROJECT_DIR$/../Virions/DiscordWebhookAPI" />
+      <path value="$PROJECT_DIR$/../Virions/LanguageSystem" />
+      <path value="$PROJECT_DIR$/../Virions/LibExtraPath" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

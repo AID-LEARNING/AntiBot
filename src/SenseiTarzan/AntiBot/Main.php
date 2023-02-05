@@ -11,6 +11,7 @@ class Main extends PluginBase
 
     protected function onEnable(): void
     {
+
         EventLoader::loadEventWithClass($this, BlackListListener::class);
     }
 
