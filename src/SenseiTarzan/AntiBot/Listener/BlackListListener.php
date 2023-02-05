@@ -54,6 +54,7 @@ class BlackListListener
             }
         } else if ($packet instanceof TextPacket) {
             if (count($packet->parameters) >= self::MAX_TEXT_PARAMETERS) {
+                $this->blockEvent($event);
             }
         } else if ($packet instanceof ClientCacheBlobStatusPacket) {
             if (count($packet->getHitHashes()) > self::MAX_HIT_HASHES || count($packet->getMissHashes()) > self::MAX_MISS_HASHES) {
