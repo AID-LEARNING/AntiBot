@@ -20,33 +20,37 @@ class BlackListListener
     const MAX_ITEM_INTERACTION = 100;
     const MAX_METADATA = 130;
     const MAX_TEXT_PARAMETERS = 100;
+    const MAX_CRAFTING_INPUT = 0;
+    const MAX_CRAFTING_OUTPUT = 1;
     #[EventAttribute(EventPriority::LOWEST)]
-    public function onDataReceive(DataPacketReceiveEvent $event): void{
+    public function onDataReceive(DataPacketReceiveEvent $event): void
+    {
         $packet = $event->getPacket();
-        if ($packet instanceof InventoryTransactionPacket){
-            if (count($packet->trData->getActions()) > self::MAX_INVENTORY_TRANSACTION){
+        if ($packet instanceof InventoryTransactionPacket) {
+            if (count($packet->trData->getActions()) >= self::MAX_INVENTORY_TRANSACTION) {
                 $this->blockEvent($event);
             }
         }
-        if ($packet instanceof PlayerAuthInputPacket){
-            if (($packet->getBlockActions() !== null && count($packet->getBlockActions()) > self::MAX_BLOCK_ACTION) || ($packet->getItemInteractionData() !== null && count($packet->getItemInteractionData()->getRequestChangedSlots()) > self::MAX_ITEM_INTERACTION)){
-                $this->blockEvent($event);
-            }
-        }
-
-        if ($packet instanceof SetActorDataPacket){
-            if (count($packet->metadata) > self::MAX_METADATA){
+        if ($packet instanceof PlayerAuthInputPacket) {
+            if (($packet->getBlockActions() !== null && count($packet->getBlockActions()) >= self::MAX_BLOCK_ACTION) || ($packet->getItemInteractionData() !== null && count($packet->getItemInteractionData()->getRequestChangedSlots()) >= self::MAX_ITEM_INTERACTION)) {
                 $this->blockEvent($event);
             }
         }
 
-        if ($packet instanceof CraftingEventPacket){
-            var_dump(count($packet->input));
-            var_dump(count($packet->output));
+        if ($packet instanceof SetActorDataPacket) {
+            if (count($packet->metadata) >= self::MAX_METADATA) {
+                $this->blockEvent($event);
+            }
         }
 
-        if ($packet instanceof TextPacket){
-            if (count($packet->parameters) > self::MAX_TEXT_PARAMETERS){
+        if ($packet instanceof CraftingEventPacket) {
+            if (count($packet->input) > self::MAX_CRAFTING_INPUT || count($packet->output) > self::MAX_CRAFTING_OUTPUT) {
+                $this->blockEvent($event);
+            }
+        }
+
+        if ($packet instanceof TextPacket) {
+            if (count($packet->parameters) >= self::MAX_TEXT_PARAMETERS) {
                 $this->blockEvent($event);
             }
         }
