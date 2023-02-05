@@ -25,6 +25,9 @@ class BlackListListener
     const MAX_ITEM_STACK_REQUEST = 100;
     const MAX_CRAFTING_INPUT = 0;
     const MAX_CRAFTING_OUTPUT = 1;
+    const MAX_HIT_HASHES = 0;
+    const MAX_MISS_HASHES = 0;
+
     #[EventAttribute(EventPriority::LOWEST)]
     public function onDataReceive(DataPacketReceiveEvent $event): void
     {
@@ -33,29 +36,29 @@ class BlackListListener
             if (count($packet->trData->getActions()) >= self::MAX_INVENTORY_TRANSACTION) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof PlayerAuthInputPacket) {
+        } else if ($packet instanceof PlayerAuthInputPacket) {
             if (($packet->getBlockActions() !== null && count($packet->getBlockActions()) >= self::MAX_BLOCK_ACTION) || ($packet->getItemInteractionData() !== null && count($packet->getItemInteractionData()->getRequestChangedSlots()) >= self::MAX_ITEM_INTERACTION)) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof SetActorDataPacket) {
+        } else if ($packet instanceof SetActorDataPacket) {
             if (count($packet->metadata) >= self::MAX_METADATA) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof ItemStackRequestPacket){
+        } else if ($packet instanceof ItemStackRequestPacket) {
             if (count($packet->getRequests()) > self::MAX_ITEM_STACK_REQUEST) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof CraftingEventPacket) {
+        } else if ($packet instanceof CraftingEventPacket) {
             if (count($packet->input) > self::MAX_CRAFTING_INPUT || count($packet->output) > self::MAX_CRAFTING_OUTPUT) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof TextPacket) {
+        } else if ($packet instanceof TextPacket) {
             if (count($packet->parameters) >= self::MAX_TEXT_PARAMETERS) {
+            }
+        } else if ($packet instanceof ClientCacheBlobStatusPacket) {
+            if (count($packet->getHitHashes()) > self::MAX_HIT_HASHES || count($packet->getMissHashes()) > self::MAX_MISS_HASHES) {
                 $this->blockEvent($event);
             }
-        }else if ($packet instanceof ClientCacheBlobStatusPacket) {
-            var_dump(count($packet->getHitHashes()));
-            var_dump(count($packet->getMissHashes()));
         }
     }
 
