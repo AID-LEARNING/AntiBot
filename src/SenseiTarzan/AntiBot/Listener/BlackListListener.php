@@ -6,6 +6,7 @@ use pocketmine\event\EventPriority;
 use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\network\mcpe\protocol\CraftingEventPacket;
 use pocketmine\network\mcpe\protocol\InventoryTransactionPacket;
+use pocketmine\network\mcpe\protocol\ItemStackRequestPacket;
 use pocketmine\network\mcpe\protocol\PlayerAuthInputPacket;
 use pocketmine\network\mcpe\protocol\SetActorDataPacket;
 use pocketmine\network\mcpe\protocol\TextPacket;
@@ -41,6 +42,10 @@ class BlackListListener
             if (count($packet->metadata) >= self::MAX_METADATA) {
                 $this->blockEvent($event);
             }
+        }
+
+        if ($packet instanceof ItemStackRequestPacket){
+            var_dump(count($packet->getRequests()));
         }
 
         if ($packet instanceof CraftingEventPacket) {
