@@ -1,6 +1,7 @@
 ---
 branches:
   - stable
+  - beta
 projects:
   AntiBot:
     path: ""
