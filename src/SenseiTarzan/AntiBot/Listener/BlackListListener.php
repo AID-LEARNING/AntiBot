@@ -22,11 +22,11 @@ class BlackListListener
     const MAX_ITEM_INTERACTION = 100;
     const MAX_METADATA = 130;
     const MAX_TEXT_PARAMETERS = 100;
-    const MAX_ITEM_STACK_REQUEST = 100;
+    const MAX_ITEM_STACK_REQUEST = 100; //NOT USE by PMMP4
     const MAX_CRAFTING_INPUT = 0;
     const MAX_CRAFTING_OUTPUT = 1;
-    const MAX_HIT_HASHES = 0;
-    const MAX_MISS_HASHES = 0;
+    const MAX_HIT_HASHES = 0; //NOT USE by PMMP4
+    const MAX_MISS_HASHES = 0; //NOT USE by PMMP4
 
     #[EventAttribute(EventPriority::LOWEST)]
     public function onDataReceive(DataPacketReceiveEvent $event): void
