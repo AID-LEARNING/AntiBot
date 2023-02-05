@@ -4,6 +4,7 @@ namespace SenseiTarzan\AntiBot\Listener;
 
 use pocketmine\event\EventPriority;
 use pocketmine\event\server\DataPacketReceiveEvent;
+use pocketmine\network\mcpe\protocol\CraftingEventPacket;
 use pocketmine\network\mcpe\protocol\InventoryTransactionPacket;
 use pocketmine\network\mcpe\protocol\PlayerAuthInputPacket;
 use pocketmine\network\mcpe\protocol\SetActorDataPacket;
@@ -37,6 +38,11 @@ class BlackListListener
             if (count($packet->metadata) > self::MAX_METADATA){
                 $this->blockEvent($event);
             }
+        }
+
+        if ($packet instanceof CraftingEventPacket){
+            var_dump(count($packet->input));
+            var_dump(count($packet->output));
         }
 
         if ($packet instanceof TextPacket){
